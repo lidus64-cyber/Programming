@@ -12,8 +12,8 @@ console.log(greeting);
     let variable = "hello sir"
     const PI = 3.1415
 }
-//console.log(PI)//throws error saying variable not defined
-//console.log(variable)//constant not defined
+console.log(PI)//throws error saying variable not defined
+console.log(variable)//constant not defined
 
 
 // Task 3 – Arrow Function Simple
@@ -85,6 +85,12 @@ console.log(arr3);
 
 // Task 10 – Merge and Destructure Objects
 // Create two objects: {a: 1, b: 2} and {c: 3, d: 4}. Merge them using the spread operator. Then destructure the merged object to extract a and d and log them.
+let obj1 = {a: 1, b: 2};
+let obj2 = {c: 3, d: 4};
+let mergedobj = {...obj1,...obj2};
+let destructuredobj = {a,d}=mergedobj;
+console.log(a);
+console.log(d);
 
 
 
