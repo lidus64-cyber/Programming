@@ -35,7 +35,7 @@ improvedexecute();//no error proper output
 // Task 3 — Module: Export a config
 
 // Create a config.js and export API_BASE_URL, then import it inside main.js and print it.
-import { API_BASE_URL } from "/.config.js";
+import { API_BASE_URL } from "./config.js";
 console.log(API_BASE_URL);
 
 
@@ -55,7 +55,15 @@ console.log(API_BASE_URL);
 // Import and use them in another file.
 
 
+import {
+    formatCurrency,
+    generateRandomId,
+    getTodayDate
+} from "./utils.js";
 
+console.log(formatCurrency(99.99));
+console.log(generateRandomId());
+console.log(getTodayDate());
 
 
 
@@ -72,7 +80,20 @@ console.log(API_BASE_URL);
 
 // Create an object and print info.
 
+class Product {
+    constructor(name, price) {
+        this.name = name;
+        this.price = price;
+    }
 
+    getInfo() {
+        return `${this.name} costs $${this.price}`;
+    }
+}
+
+const p1 = new Product("Laptop", 1200);
+
+console.log(p1.getInfo());
 
 
 
@@ -85,7 +106,36 @@ console.log(API_BASE_URL);
 
 
 
+class Product {
+    constructor(name, price) {
+        this.name = name;
+        this.price = price;
+    }
 
+    getInfo() {
+        return `${this.name} costs $${this.price}`;
+    }
+}
+
+class FoodProduct extends Product {
+    constructor(name, price, expiryDate) {
+        super(name, price);
+        this.expiryDate = expiryDate;
+    }
+
+    getExpiryInfo() {
+        return `${this.name} expires on ${this.expiryDate}`;
+    }
+}
+
+const milk = new FoodProduct(
+    "Milk",
+    3,
+    "2026-06-15"
+);
+
+console.log(milk.getInfo());
+console.log(milk.getExpiryInfo());
 
 
 
@@ -100,7 +150,21 @@ console.log(API_BASE_URL);
 
 
 
+function getSettings() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                theme: "dark",
+                language: "English"
+            });
+        }, 2000);
+    });
+}
 
+getSettings()
+    .then((settings) => {
+        console.log(settings);
+    });
 
 
 
@@ -111,7 +175,24 @@ console.log(API_BASE_URL);
 // Use async/await to get and log users.
 
 
+function fetchUsers() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve([
+                { id: 1, name: "Sudil" },
+                { id: 2, name: "Ram" }
+            ]);
+        }, 1000);
+    });
+}
 
+async function loadUsers() {
+    const users = await fetchUsers();
+
+    console.log(users);
+}
+
+loadUsers();
 
 
 
@@ -122,7 +203,39 @@ console.log(API_BASE_URL);
 
 
 
+function fetchUsers() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
 
+            const success = Math.random() > 0.5;
+
+            if (success) {
+                resolve([
+                    { id: 1, name: "Sudil" },
+                    { id: 2, name: "Ram" }
+                ]);
+            } else {
+                reject("Server unavailable");
+            }
+
+        }, 1000);
+    });
+}
+
+async function loadUsers() {
+    try {
+        const users = await fetchUsers();
+
+        console.log(users);
+
+    } catch (error) {
+        console.log(
+            "Could not load users. Please try again later."
+        );
+    }
+}
+
+loadUsers();
 
 
 
@@ -142,3 +255,67 @@ console.log(API_BASE_URL);
 
 
 
+import { API_BASE_URL } from "./config.js";
+import { formatCurrency } from "./utils.js";
+
+class Product {
+    constructor(name, price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    getInfo() {
+        return `${this.name} - ${formatCurrency(this.price)}`;
+    }
+}
+
+function fetchProducts() {
+    return new Promise((resolve, reject) => {
+
+        setTimeout(() => {
+
+            const success = Math.random() > 0.3;
+
+            if (success) {
+                resolve([
+                    new Product("Laptop", 1200),
+                    new Product("Mouse", 25)
+                ]);
+            } else {
+                reject("Failed to fetch products");
+            }
+
+        }, 1000);
+
+    });
+}
+
+async function startApp() {
+
+    try {
+
+        console.log(
+            "API URL:",
+            API_BASE_URL
+        );
+
+        const products =
+            await fetchProducts();
+
+        products.forEach((product) => {
+            console.log(
+                product.getInfo()
+            );
+        });
+
+    } catch (error) {
+
+        console.log(
+            "Something went wrong:",
+            error
+        );
+
+    }
+}
+
+startApp();
